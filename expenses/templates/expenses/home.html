@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Expense Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; background-color: #f4f4f9; }
+        h1 { text-align: center; color: #333; }
+        h3 { color: #555; }
+        
+        .box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        
+        input, select { padding: 8px; border: 1px solid #ddd; border-radius: 4px; width: 100px; }
+        button { background-color: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #218838; }
+
+        ul { list-style: none; padding: 0; }
+        li { background: white; border-bottom: 1px solid #eee; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        li:first-child { border-top-left-radius: 8px; border-top-right-radius: 8px; }
+        li:last-child { border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; border-bottom: none; }
+        
+        .actions a { text-decoration: none; font-size: 0.9em; margin-left: 10px; }
+        .edit-btn { color: #007bff; }
+        .delete-btn { color: #dc3545; }
+    </style>
+</head>
+<body>
+
+    <h1>💰 My Expense Tracker</h1>
+
+    <div style="text-align: center; margin-bottom: 20px;">
+        <span>Welcome, <strong>{{ user.username }}</strong>!</span>
+        <form action="{% url 'logout' %}" method="POST" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" style="background-color: #dc3545; padding: 5px 10px; margin-left: 10px; font-size: 12px;">Log Out</button>
+        </form>
+    </div>
+    <div class="box" style="text-align: center;">
+        <h3>Total Spent</h3>
+        <h1 style="color: #28a745; margin: 0;">{{ total }} LKR</h1>
+    </div>
+
+    <div class="box" style="width: 100%; max-width: 350px; margin: 0 auto 20px auto; text-align: center;">
+        <h3>Expenses by Category</h3>
+        <canvas id="expenseChart"></canvas> 
+    </div>
+
+    <div class="box">
+        <h3>Add New Expense</h3>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Add Expense</button>
+        </form>
+    </div>
+
+    <h3>Recent Transactions</h3>
+    <ul>
+        {% for expense in expenses %}
+            <li>
+                <div>
+                    <strong>{{ expense.title }}</strong>
+                    <br>
+                    <small style="color: #888;">{{ expense.date }}</small>
+                </div>
+                
+                <div style="display: flex; align-items: center;">
+                    <span style="font-weight: bold; margin-right: 15px;">{{ expense.amount }} LKR</span>
+                    
+                    <div class="actions">
+                        <a href="{% url 'update_expense' expense.id %}" class="edit-btn">Edit</a>
+                        <a href="{% url 'delete_expense' expense.id %}" class="delete-btn">Delete</a>
+                    </div>
+                </div>
+            </li>
+        {% empty %}
+            <li style="text-align: center; color: #888;">No expenses found! Start spending money.</li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        const ctx = document.getElementById('expenseChart');
+        
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: {{ chart_labels|safe }},
+                datasets: [{
+                    label: 'Amount Spent (LKR)',
+                    data: {{ chart_data|safe }},
+                    backgroundColor: [
+                        '#FF6384', '#36A2EB', '#FFCE56', 
+                        '#4BC0C0', '#9966FF', '#FF9F40'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+        });
+    </script>
+</body>
+</html>
