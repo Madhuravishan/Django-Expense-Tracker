@@ -2,19 +2,129 @@
 <html>
 <head>
     <title>Edit Expense</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    
+    <style>
+        /* Beautiful gradient background similar to login page */
+        body { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+        
+        /* The floating card design */
+        .edit-card { 
+            max-width: 500px; 
+            width: 100%; 
+            padding: 3rem 2.5rem; 
+            border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2); 
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Smooth hover effect for the card */
+        .edit-card:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease;
+        }
+
+        /* --- ADD THESE NEW STYLES --- */
+
+        /* 1. Style the 'Update Expense' Button */
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #764ba2; /* Purple gradient color */
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px; /* Add some space above the button */
+        }
+
+        /* Make the button hover smoothly */
+        button:hover {
+            background: #667eea; /* Lighter purple on hover */
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(118, 75, 162, 0.4);
+        }
+
+        /* 2. Style the 'Cancel' Link */
+        a {
+            display: block; /* Makes it easier to center and align */
+            text-align: center;
+            margin-top: 15px;
+            color: #764ba2; /* Purple color */
+            text-decoration: none; /* Removes the basic underline */
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            color: #667eea;
+            text-decoration: underline; /* Standard underline appears on hover */
+        }
+
+        /* Style the input fields (Title, Amount, Date, Category) */
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 8px 0 20px 0; /* Space between fields */
+            display: inline-block;
+            border: 2px solid #eee; /* Soft border */
+            border-radius: 10px;
+            box-sizing: border-box; /* Ensures padding doesn't break layout */
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: #f9f9f9;
+        }
+
+        /* The "Magic" Focus Effect when you click inside a box */
+        input:focus, select:focus {
+            border-color: #764ba2; /* Purple border on click */
+            background-color: #fff;
+            outline: none; /* Removes the ugly default browser outline */
+            box-shadow: 0 0 8px rgba(118, 75, 162, 0.2);
+        }
+
+        /* Style the labels (Title:, Amount:, etc.) */
+        p label {
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 5px;
+            display: block;
+        }
+    </style>
 </head>
 <body>
-    <h2>Edit Expense</h2>
-    
-    <div style="border: 1px solid #ccc; padding: 10px;">
+
+    <div class="edit-card animate__animated animate__bounceInDown">
+        
+        <div class="text-center mb-4 animate__animated animate__fadeIn" style="animation-delay: 0.5s;">
+            <div class="display-1 mb-3">✏️</div>
+            <h2 class="fw-bold text-dark">Edit Expense</h2>
+            <p class="text-muted">Update your transaction details</p>
+        </div>
+
         <form method="POST">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit">Update Expense</button>
         </form>
+        
+        <br>
+        <a href="{% url 'home' %}">Cancel (Go Back)</a>
     </div>
-    
-    <br>
-    <a href="{% url 'home' %}">Cancel (Go Back)</a>
+
 </body>
 </html>
