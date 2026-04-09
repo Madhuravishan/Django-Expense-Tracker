@@ -10,20 +10,31 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        /* Clean up Django's form inputs */
+        /* Clean up Django's form inputs to look modern */
         input, select { 
             width: 100%; 
             padding: 10px; 
             margin-bottom: 15px; 
             border: 1px solid #ced4da; 
-            border-radius: 5px; 
+            border-radius: 8px; 
             background-color: #f8f9fa;
+            transition: border-color 0.3s ease;
+        }
+        input:focus {
+            border-color: #198754; /* Green focus to match 'Add' button */
+            outline: none;
+            background-color: #fff;
         }
         label { 
             font-weight: bold; 
             margin-bottom: 5px; 
             color: #495057;
             display: block;
+        }
+        /* Custom scrollbar for recent transactions */
+        .transaction-container {
+            max-height: 500px;
+            overflow-y: auto;
         }
     </style>
 </head>
@@ -72,6 +83,19 @@
                         <form method="POST" action="">
                             {% csrf_token %}
                             {{ form.as_p }}
+
+                            <datalist id="category-list">
+                                <option value="Food">
+                                <option value="Transport">
+                                <option value="Boarding">
+                                <option value="Course Fee">
+                                <option value="Project Fees">
+                                <option value="Internet/Data">
+                                <option value="Health">
+                                <option value="Entertainment">
+                                <option value="Shopping">
+                            </datalist>
+
                             <button type="submit" class="btn btn-success w-100 mt-2 py-2 shadow-sm fw-bold fs-5">Add Expense</button>
                         </form>
                     </div>
@@ -82,12 +106,12 @@
 
         <h4 class="mb-3 mt-4 text-secondary animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">Recent Transactions</h4>
         
-        <div class="list-group shadow-sm mb-5 animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
+        <div class="list-group shadow-sm mb-5 transaction-container animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
             {% for expense in expenses %}
                 <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-3 border-0 border-bottom">
                     <div>
                         <h6 class="mb-0 fw-bold text-dark">{{ expense.title }}</h6>
-                        <small class="text-muted">{{ expense.date }}</small>
+                        <small class="text-muted">{{ expense.date }} | {{ expense.category }}</small>
                     </div>
                     
                     <div class="d-flex align-items-center">
@@ -121,14 +145,14 @@
                     data: {{ chart_data|safe }},
                     backgroundColor: [
                         '#FF6384', '#36A2EB', '#FFCE56', 
-                        '#4BC0C0', '#9966FF', '#FF9F40'
+                        '#4BC0C0', '#9966FF', '#FF9F40', '#20c997'
                     ],
                     borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false, /* This stops the stretching */
+                maintainAspectRatio: false,
                 plugins: {
                     legend: { position: 'right' }
                 }
