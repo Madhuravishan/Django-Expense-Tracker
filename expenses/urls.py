@@ -1,8 +1,17 @@
-from django.urls import path
-from . import views
+from django.contrib import admin
+from django.urls import path, include
+from expenses import views
 
 urlpatterns = [
-    path('', views.home, name='home'),
-    path('update/<int:expense_id>/', views.update_expense, name='update_expense'),
-    path('delete/<int:expense_id>/', views.delete_expense, name='delete_expense'),
+    # The Admin Panel
+    path('admin/', admin.site.urls), 
+    
+    # Your built-in Login/Logout paths 
+    path('accounts/', include('django.contrib.auth.urls')),
+    
+    # 🌟 THIS IS THE NEW LINE FOR SIGNUP 🌟
+    path('signup/', views.signup, name='signup'),
+    
+    # Your Home Dashboard
+    path('', views.home, name='home'), 
 ]
