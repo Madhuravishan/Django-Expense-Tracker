@@ -1,9 +1,11 @@
+from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required 
 from django.contrib.auth.forms import UserCreationForm  # <-- NEW IMPORT
 from django.db.models import Sum
 from .models import Expense
 from .forms import ExpenseForm
+from django.db import models
 
 # --- NEW SIGNUP VIEW ---
 def signup(request):
@@ -41,11 +43,12 @@ def home(request):
     if sum_amount is None:
         sum_amount = 0
 
-    # Calculate totals per category for the charts
-    category_sums = expenses.values('category').annotate(category_total=Sum('amount'))
     
-    chart_labels = []
-    chart_data = []
+    
+    category_sums = expenses.values('category__name').annotate(category_total=models.Sum('amount'))
+
+    chart_labels = [item['category__name'] for item in category_sums]
+    chart_data = [float(item['category_total']) for item in category_sums]
     
     for item in category_sums:
         chart_labels.append(item['category'])
@@ -80,3 +83,14 @@ def update_expense(request, expense_id):
         form = ExpenseForm(instance=expense)
             
     return render(request, 'expenses/edit.html', {'form': form})
+
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login') 
+    else:
+        form = UserCreationForm()
+
+    return render(request, 'registration/signup.html', {'form': form})
