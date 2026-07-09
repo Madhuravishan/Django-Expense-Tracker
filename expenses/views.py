@@ -5,7 +5,6 @@ from django.contrib.auth.forms import UserCreationForm  # <-- NEW IMPORT
 from django.db.models import Sum
 from .models import Expense
 from .forms import ExpenseForm
-from django.db import models
 
 # --- NEW SIGNUP VIEW ---
 def signup(request):
@@ -43,12 +42,11 @@ def home(request):
     if sum_amount is None:
         sum_amount = 0
 
+    # Calculate totals per category for the charts
+    category_sums = expenses.values('category').annotate(category_total=Sum('amount'))
     
-    
-    category_sums = expenses.values('category__name').annotate(category_total=models.Sum('amount'))
-
-    chart_labels = [item['category__name'] for item in category_sums]
-    chart_data = [float(item['category_total']) for item in category_sums]
+    chart_labels = []
+    chart_data = []
     
     for item in category_sums:
         chart_labels.append(item['category'])
