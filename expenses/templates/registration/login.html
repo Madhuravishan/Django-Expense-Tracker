@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     
     <style>
-        /* A sleek, modern gradient background */
         body { 
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex; 
@@ -20,24 +19,21 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
-        /* The floating card design */
         .login-card { 
             max-width: 420px; 
             width: 100%; 
             padding: 3rem 2.5rem; 
             border-radius: 20px; 
             box-shadow: 0 15px 35px rgba(0,0,0,0.2); 
-            background: rgba(255, 255, 255, 0.95); /* Slightly transparent white */
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
         }
 
-        /* Fun hover effect for the card */
         .login-card:hover {
             transform: translateY(-5px);
             transition: transform 0.3s ease;
         }
         
-        /* Clean inputs */
         input { 
             width: 100%; 
             padding: 12px 15px; 
@@ -62,7 +58,6 @@
             display: block; 
         }
 
-        /* Custom Button Styling */
         .btn-custom {
             background: linear-gradient(to right, #667eea, #764ba2);
             border: none;
@@ -96,7 +91,7 @@
         </form>
 
         <div class="text-center mt-4 animate__animated animate__fadeIn" style="animation-delay: 1s;">
-            <small class="text-muted">Don't have an account? <a href="#" class="text-decoration-none" style="color: #667eea;">Sign up</a></small>
+            <small class="text-muted">Don't have an account? <a href="{% url 'signup' %}" style="text-decoration: none; font-weight: bold; color: #667eea;">Sign up</a></small>
         </div>
     </div>
 

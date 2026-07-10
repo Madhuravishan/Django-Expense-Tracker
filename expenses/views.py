@@ -1,12 +1,11 @@
-from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required 
-from django.contrib.auth.forms import UserCreationForm  # <-- NEW IMPORT
+from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Sum
 from .models import Expense
 from .forms import ExpenseForm
 
-# --- NEW SIGNUP VIEW ---
+# --- SIGNUP VIEW ---
 def signup(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -81,14 +80,3 @@ def update_expense(request, expense_id):
         form = ExpenseForm(instance=expense)
             
     return render(request, 'expenses/edit.html', {'form': form})
-
-def signup(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('login') 
-    else:
-        form = UserCreationForm()
-
-    return render(request, 'registration/signup.html', {'form': form})
